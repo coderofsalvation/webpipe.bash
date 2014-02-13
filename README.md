@@ -60,9 +60,10 @@ Simple, a webpipe is just a weburl which listens to a POST-request (for data) or
 
 For php there's this skeleton [repository](https://github.com/coderofsalvation/webpipe.bash.php)
 
-### Webpipes which need authorisation
+### Security
 
-In case your webpipes needs authorisation (.htaccess .htpasswd e.g.) run, decorate the curl calls with this:
+Sourcing output of remote procedures is not adviced.
+However, in case your webpipes needs authorisation (.htaccess .htpasswd e.g.) run, decorate the curl calls with this:
 
     webpipe::set curloptions http://foo.com "-user foo:bar"
 
