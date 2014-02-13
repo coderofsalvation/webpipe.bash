@@ -60,6 +60,10 @@ Simple, a webpipe is just a weburl which listens to a POST-request (for data) or
 
 For php there's this skeleton [repository](https://github.com/coderofsalvation/webpipe.bash.php)
 
+### Projects using webpipe.bash 
+
+* bashlive.com ( supernormal livecoding using bash )
+
 ### Security
 
 Sourcing output of remote procedures is not adviced.
