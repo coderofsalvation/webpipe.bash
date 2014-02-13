@@ -7,8 +7,8 @@ Webpipes empower your bash-environment with remote executed applications, aka Ba
 
 ### ***UPDATE: use bashlive ***
 
-<a target="_blank" href="http://www.bashlive.com"></a>bashlive</a> integrates this project, including other powerfull features.
-You are adviced to use <a target="_blank" href="http://www.bashlive.com"></a>bashlive</a> to enjoy community webpipes.
+[bashlive](http://www.bashlive.com) integrates this project, including other powerfull features.
+You are adviced to use [bashlive](http://www.bashlive.com) to enjoy easypeasy community webpipes.
 
 ### Example of a webpipe
 
