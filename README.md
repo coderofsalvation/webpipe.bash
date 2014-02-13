@@ -5,31 +5,34 @@ Webpipes empower your bash-environment with remote executed applications, aka Ba
 
 ### Example of a webpipe
 
-$ json_print_r --help
+Getting info:
 
-    Usage: echo <jsontext> | json_print_r [options]
+    $ json_print_r --help
 
-    prettyprints a json string using the php print_r() function 
+        Usage: echo <jsontext> | json_print_r [options]
 
-    Options:
-         --foo=n             number of foos
+        prettyprints a json string using the php print_r() function 
 
-    Examples:
-      echo '{"foo":"bar"}' | json_print_r 
-      echo '{"foo":"bar"}' | json_print_r --foo=2
+        Options:
+             --foo=n             number of foos
 
+        Examples:
+          echo '{"foo":"bar"}' | json_print_r 
+          echo '{"foo":"bar"}' | json_print_r --foo=2
 
-$ echo '{"foo":["bar","flop"]}' | json_print_r
+Execute it:
 
-    stdClass Object
-    (
-        [foo] => Array
-            (
-                [0] => bar
-                [1] => flop
-            )
+    $ echo '{"foo":["bar","flop"]}' | json_print_r
 
-    )
+        stdClass Object
+        (
+            [foo] => Array
+                (
+                    [0] => bar
+                    [1] => flop
+                )
+
+        )
 
 Would you believe me this just happend in the cloud using curl?
 Well it did..
