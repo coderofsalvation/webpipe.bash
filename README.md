@@ -3,6 +3,8 @@ Webpipe.bash
 
 Webpipes empower your bash-environment with remote executed applications, aka Bash in the Cloud.
 
+<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe.png"/>
+
 ### Example of a webpipe
 
 Getting info:
