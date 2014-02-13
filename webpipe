@@ -1,0 +1,44 @@
+#!/bin/bash 
+
+# this will hold specific curl options (when webpipes need authorisation)
+declare -A CURL_OPTIONS
+declare -A WEBPIPES 
+TMPFILE="/tmp/.$(whoami).webpipe"
+
+webpipe::set(){
+  case "$1" in
+    curloptions) CURL_OPTIONS[$2]="$3"      ;;
+    webpipe)    cmd="$(basename $2)"; WEBPIPES["$cmd"]="$2"; alias $cmd="webpipe::get $cmd";;
+  esac
+}
+
+webpipe::get_domain(){
+  domain="${1/http:/}"; domain="${domain/https:/}"; domain="${domain/\/\//}"; domain="${domain//\/*/}"; 
+  printf "$domain"
+}
+
+webpipe::get(){
+  url="${WEBPIPES[$1]}";
+  domain="$(webpipe::get_domain "$url")"
+  curloptions="${CURL_OPTIONS["$domain"]}"
+  (( "${#url}" == 0   )) && return 1;
+  [[ "$2" == "--help" ]] && method="-X OPTIONS" || method="-X POST"
+  [[ ! -n $OUTPUT     ]] && type="text/plain" || type="$OUTPUT"
+  [[ -t 0 ]] && POST="" || POST="-d "$(cat -)""
+  curl -L -s ${method} ${curloptions} ${POST} -H "Content-Type: $type" "$url"
+  return $?
+}
+
+webpipe::index(){
+  domain="$(webpipe::get_domain "$1")"
+  curloptions="${CURL_OPTIONS["$domain"]}"
+  pipes="$(curl -L -s ${curloptions} "$1")"; (( $? > 0 )) && { echo "could not fetch $url"; return 1; }
+  if [[ "$pipes" =~ "<" ]] || [[ "$pipes" =~ "{" ]]; then echo "$pipes"; return 1; fi 
+  echo "$pipes" > $TMPFILE
+  while read url; do 
+    echo "webpipe> adding $url"
+    webpipe::set webpipe "$url"
+  done < $TMPFILE
+}
+
+#"$@"
