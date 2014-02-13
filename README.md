@@ -41,11 +41,11 @@ Well it did..
 
 Its very simple, first get webpipe.bash
 
-    wget https://
+    wget https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe
 
 Now the only thing you need to do is index some online webpipes:
 
-    source webpipe.bash
+    source webpipe
     webpipe::index http://neon-semiotics-490.appspot.com
 
 Done! Now you can just use 'json_print_r' in your terminal as if it were a local binary.
