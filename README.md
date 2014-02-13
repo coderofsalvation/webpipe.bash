@@ -48,9 +48,18 @@ Its very simple, first get webpipe.bash
 Now the only thing you need to do is index some online webpipes:
 
     source webpipe
+    webpipe::set webpipe http://neon-semiotics-490.appspot.com/json_print_r
+
+Done! Now you can just use 'json_print_r --help' in your terminal as if it were a local binary.
+
+### Indexing lists of commands
+
+You can also import a batch of webpipes all at once like this:
+
+    source webpipe
     webpipe::index http://neon-semiotics-490.appspot.com
 
-Done! Now you can just use 'json_print_r' in your terminal as if it were a local binary.
+Voila..now json_print_r will also be indexed.
 
 `HINT: you can put the above in your ~/.bashrc`
 
