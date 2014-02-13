@@ -62,6 +62,6 @@ For php there's this skeleton [repository](https://github.com/coderofsalvation/w
 
 In case your webpipes needs authorisation (.htaccess .htpasswd e.g.) run, decorate the curl calls with this:
 
-    webpipe set curloptions http://foo.com "-user foo:bar"
+    webpipe::set curloptions http://foo.com "-user foo:bar"
 
 By doing so, the webpipe (called by curl) will pass authorisation info.
