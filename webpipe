@@ -7,7 +7,7 @@ TMPFILE="/tmp/.$(whoami).webpipe"
 
 webpipe::set(){
   case "$1" in
-    curloptions) CURL_OPTIONS[$2]="$3"      ;;
+    curloptions) CURL_OPTIONS["$2"]="$3"      ;;
     webpipe)    cmd="$(basename $2)"; WEBPIPES["$cmd"]="$2"; alias $cmd="webpipe::get $cmd";;
   esac
 }
@@ -20,8 +20,9 @@ webpipe::get_domain(){
 webpipe::get(){
   url="${WEBPIPES[$1]}";
   domain="$(webpipe::get_domain "$url")"
+  declare -A CURL_OPTIONS # bash bug? we need to do this again
   curloptions="${CURL_OPTIONS["$domain"]}"
-  (( "${#url}" == 0   )) && return 1;
+  [[ "${#url}" == 0   ]] && return 1;
   [[ "$2" == "--help" ]] && method="-X OPTIONS" || method="-X POST"
   [[ ! -n $OUTPUT     ]] && type="text/plain" || type="$OUTPUT"
   [[ -t 0 ]] && POST="" || POST="-d "$(cat -)""
@@ -31,6 +32,7 @@ webpipe::get(){
 
 webpipe::index(){
   domain="$(webpipe::get_domain "$1")"
+  declare -A CURL_OPTIONS # bash bug? we need to do this again
   curloptions="${CURL_OPTIONS["$domain"]}"
   pipes="$(curl -L -s ${curloptions} "$1")"; (( $? > 0 )) && { echo "could not fetch $url"; return 1; }
   if [[ "$pipes" =~ "<" ]] || [[ "$pipes" =~ "{" ]]; then echo "$pipes"; return 1; fi 
