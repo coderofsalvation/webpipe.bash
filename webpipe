@@ -27,9 +27,42 @@ webpipe::set(){
   esac
 }
 
+# applies a raw url encode on the string
+# usage: urlencode "foo foo bar"      <-- outputs: foo%3dfoo%20bar
+# @param string stringtoencode
+ 
+urlencode() {
+  local string="${1}"; local strlen=${#string}; local encoded=""
+  for (( pos=0 ; pos<strlen ; pos++ )); do
+     c=${string:$pos:1}
+     case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * )               printf -v o '%%%02x' "'$c"
+     esac
+     encoded+="${o}"
+  done
+  echo "${encoded}"    # You can either set a return variable (FASTER) 
+}
+
 webpipe::get_domain(){
   domain="${1/http:/}"; domain="${domain/https:/}"; domain="${domain/\/\//}"; domain="${domain//\/*/}"; 
   printf "$domain"
+}
+
+webpipe::args2http(){
+  httpstr="?"; pos=1; lastarg=""
+  for arg in "$@"; do 
+    if [[ "${arg:0:1}" == "-" ]]; then
+      flag="${arg/$trail*/}"; key="${flag//-/}"; value="${flag/*$trail/}"
+      httpstr="$httpstr&$key="; lastarg="option"
+    else
+      [[ "$lastarg" == "option" ]] && httpstr="$httpstr$(urlencode "$arg")" || {
+        httpstr="$httpstr&$pos=$(urlencode "$arg")"; ((pos++));
+      };
+      lastarg="positional"
+    fi
+  done
+  echo "${httpstr/?&/?}"
 }
 
 webpipe::get(){
@@ -37,11 +70,13 @@ webpipe::get(){
   domain="$(webpipe::get_domain "$url")"
   declare -A CURL_OPTIONS # bash bug? we need to do this again
   curloptions="${CURL_OPTIONS["$domain"]}"
+  shift; getstr="$(webpipe::args2http "$@")"
   [[ "${#url}" == 0   ]] && return 1;
   [[ "$2" == "--help" ]] && method="-X OPTIONS" || method="-X POST"
   [[ ! -n $OUTPUT     ]] && type="text/plain" || type="$OUTPUT"
-  [[ -t 0 ]] && POST="" || POST="-d "$(cat -)""
-  curl -L -s ${method} ${curloptions} ${POST} -H "Content-Type: $type" "$url"
+  [[ -t 0 ]] && POST="" || POST="$(cat -)"
+  [[ "${#POST}" == "0" ]] && method="-X GET"
+  curl -L -s ${method} ${curloptions} -d "$POST" -H "Content-Type: $type" "$url$getstr"
   return $?
 }
 
