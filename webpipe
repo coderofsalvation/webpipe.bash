@@ -27,10 +27,6 @@ webpipe::set(){
   esac
 }
 
-# applies a raw url encode on the string
-# usage: urlencode "foo foo bar"      <-- outputs: foo%3dfoo%20bar
-# @param string stringtoencode
- 
 urlencode() {
   local string="${1}"; local strlen=${#string}; local encoded=""
   for (( pos=0 ; pos<strlen ; pos++ )); do
