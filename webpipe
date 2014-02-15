@@ -49,8 +49,7 @@ webpipe::args2http(){
   httpstr="?"; pos=1; lastarg=""
   for arg in "$@"; do 
     if [[ "${arg:0:1}" == "-" ]]; then
-      flag="${arg/$trail*/}"; key="${flag//-/}"; value="${flag/*$trail/}"
-      httpstr="$httpstr&$key="; lastarg="option"
+      key="${arg//-/}"; httpstr="$httpstr&$key="; lastarg="option"
     else
       [[ "$lastarg" == "option" ]] && httpstr="$httpstr$(urlencode "$arg")" || {
         httpstr="$httpstr&$pos=$(urlencode "$arg")"; ((pos++));
