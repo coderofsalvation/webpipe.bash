@@ -69,7 +69,7 @@ webpipe::get(){
   [[ "${#url}" == 0   ]] && return 1;
   [[ "$2" == "--help" ]] && method="-X OPTIONS" || method="-X POST"
   [[ ! -n $OUTPUT     ]] && type="text/plain" || type="$OUTPUT"
-  [[ -t 0 ]] && POST="" || POST="$(cat -)"
+  [[ -t 0 ]] && POST="" || { cat - > $TMPFILE.post; POST="@$TMPFILE.post"; }
   [[ "${#POST}" == "0" ]] && method="-X GET"
   curl -L -s ${method} ${curloptions} -d "$POST" -H "Content-Type: $type" "$url$getstr"
   return $?
