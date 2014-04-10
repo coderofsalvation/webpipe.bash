@@ -63,7 +63,7 @@ webpipe::args2http(){
 webpipe::get(){
   url="${WEBPIPES[$1]}";
   domain="$(webpipe::get_domain "$url")"
-  declare -A CURL_OPTIONS # bash bug? we need to do this again
+  # declare -A CURL_OPTIONS # bash bug? we need to do this again
   curloptions="${CURL_OPTIONS["$domain"]}"
   shift; getstr="$(webpipe::args2http "$@")"
   [[ "${#url}" == 0   ]] && return 1;
