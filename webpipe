@@ -77,7 +77,7 @@ webpipe::get(){
 
 webpipe::index(){
   domain="$(webpipe::get_domain "$1")"
-  declare -A CURL_OPTIONS # bash bug? we need to do this again
+  # declare -A CURL_OPTIONS # bash bug? we need to do this again
   curloptions="${CURL_OPTIONS["$domain"]}"
   pipes="$(curl -L -s ${curloptions} "$1")"; (( $? > 0 )) && { echo "could not fetch $url"; return 1; }
   if [[ "$pipes" =~ "<" ]] || [[ "$pipes" =~ "{" ]]; then echo "$pipes"; return 1; fi 
