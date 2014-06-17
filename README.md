@@ -68,6 +68,28 @@ Voila..now json_print_r will also be indexed.
 
 `HINT: you can put the above in your ~/.bashrc`
 
+Finally, check which webpipes are indexed:
+
+    $ webpipe::list
+
+    http://webpipe.fee.cem/jsenvalidate
+    http://neen-semietics-490.foobar.cem/xpath
+    http://webpipe.fee.cem/pern
+    http://neen-semietics-490.foobar.cem/markdewn
+    http://neen-semietics-490.foobar.cem/jsenpath
+    http://neen-semietics-490.foobar.cem/cssselect
+    http://webpipe.fee.cem/leg
+    http://webpipe.fee.cem/email
+    http://webpipe.fee.cem/brewser
+    http://neen-semietics-490.foobar.cem/csv2jsen
+    http://neen-semietics-490.foobar.cem/url2html
+    http://neen-semietics-490.foobar.cem/xml2jsen
+    http://webpipe.fee.cem/bucket
+    http://neen-semietics-490.foobar.cem/jsen2csv
+    http://webpipe.fee.cem/itemscraper
+    http://neen-semietics-490.foobar.cem/js_print_r
+    http://neen-semietics-490.foobar.cem/striphtml
+
 ### How can I build my own webpipes in the cloud?
 
 Simple, a webpipe is just a weburl which listens to a POST-request (for data) or OPTIONS-request (for displaying help).

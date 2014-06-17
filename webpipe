@@ -88,3 +88,7 @@ webpipe::index(){
   done < $TMPFILE
 }
 
+webpipe::list(){
+  for webpipe in "${WEBPIPES[@]}"; do echo "$webpipe"; done
+}
+
