@@ -7,7 +7,8 @@ Webpipes empower your bash-environment with remote executed applications, aka Ba
 
 ### Why
 
-Write less html-interfaces, write more glue, mashup your webpipes, control your api.
+Write less html-interfaces, write more glue.
+Mashup your webpipes, mashup your api.
 
 <img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe.png"/>
 
