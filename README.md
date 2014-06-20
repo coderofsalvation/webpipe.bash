@@ -113,7 +113,9 @@ The webpipes above are more or less compatible.
 One exception is that requests (with content-type 'plain/text',  used in the example above) uses single-input single-output.
 This is to easify unix commandline development, in contrast to the multi-jsoninput multi-jsonoutput requirement of the <a target="_blank" href="http://www.webpipes.org/" ></a>webpipe 0.2</a>.
 `(Jeff: if you read this, please contact me)`
-However, the multi-jsoninput multi-jsonoutput requirement *should* apply when you call it with content-type 'application/json':
+However, the multi-jsoninput multi-jsonoutput requirement *should* apply when you call it with content-type 'application/json'.
+
+Some examples:
 
     $ curl -X POST    -H 'Content-Type: text/plain' http://localhost/foobar
     # should return the processed value ("some value for bar" e.g.)
