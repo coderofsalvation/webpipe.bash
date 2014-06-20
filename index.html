@@ -31,18 +31,32 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a name="why" class="anchor" href="#why"><span class="octicon octicon-link"></span></a>Why</h3>
-
-<p>Write less html-interfaces, write more glue.
+        <p>Write less html-interfaces, write more glue.
 Mashup your webpipes, mashup your api.</p>
 
 <p></p><img alt="" src="http://media1.giphy.com/media/MVlRUmPRsAnRe/200.gif"><h3>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Its very simple, first get webpipe.bash</p>
+
+<pre><code>wget https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe
+</code></pre>
+
+<p>Now the only thing you need to do is index some online webpipes:</p>
+
+<pre><code>source webpipe
+webpipe::index http://neon-semiotics-490.appspot.com
+</code></pre>
+
+<p>Done! Now you can just use a webpipe in your terminal as if it were a local unix command.</p>
+
+<h3>
 <a name="example-of-a-webpipe" class="anchor" href="#example-of-a-webpipe"><span class="octicon octicon-link"></span></a>Example of a webpipe</h3>
 
 <p>Show usage:</p>
 
-<pre><code>Usage: echo &lt;xmltext&gt; | xpath &lt;xpath&gt; [options]
+<pre><code>$ xpath
+Usage: echo &lt;xmltext&gt; | xpath &lt;xpath&gt; [options]
 
 prints values from xml based on given xpath (can be commaseperated)
 
@@ -74,22 +88,6 @@ Well it did..</p>
 <p><img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe.png"></p>
 
 <h3>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
-
-<p>Its very simple, first get webpipe.bash</p>
-
-<pre><code>wget https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe
-</code></pre>
-
-<p>Now the only thing you need to do is index some online webpipes:</p>
-
-<pre><code>source webpipe
-webpipe::index http://neon-semiotics-490.appspot.com
-</code></pre>
-
-<p>Done! Now you can just use 'xpath --help' in your terminal as if it were a local binary.</p>
-
-<h3>
 <a name="indexing-a-single-webpipe" class="anchor" href="#indexing-a-single-webpipe"><span class="octicon octicon-link"></span></a>Indexing a single webpipe</h3>
 
 <p>You can also import a batch of webpipes all at once like this:</p>
@@ -102,7 +100,8 @@ webpipe::set webpipe http://localhost/mypipe
 
 <p><code>HINT: you can put the above in your ~/.bashrc</code></p>
 
-<p>Finally, check which webpipes are indexed:</p>
+<h3>
+<a name="show-webpipes" class="anchor" href="#show-webpipes"><span class="octicon octicon-link"></span></a>Show webpipes</h3>
 
 <pre><code>$ webpipe::list
 http://localhost/mypipe
@@ -145,6 +144,68 @@ However, in case your webpipes needs authorisation (.htaccess .htpasswd e.g.) ru
 </code></pre>
 
 <p>By doing so, the webpipe (called by curl) will pass authorisation info.</p>
+
+<h1>
+<a name="compatibility-with-webpipe-specification-02" class="anchor" href="#compatibility-with-webpipe-specification-02"><span class="octicon octicon-link"></span></a>Compatibility with WebPipe Specification 0.2</h1>
+
+<p>The webpipes above are more or less compatible.
+One exception is that requests (with content-type 'plain/text',  used in the example above) uses single-input single-output.
+This is to easify unix commandline development, in contrast to the multi-jsoninput multi-jsonoutput requirement of the <a target="_blank" href="http://www.webpipes.org/"></a>webpipe 0.2.
+<code>(Jeff: if you read this, please contact me)</code>
+However, the multi-jsoninput multi-jsonoutput requirement <em>should</em> apply when you call it with content-type 'application/json'.</p>
+
+<p>Some examples:</p>
+
+<pre><code>$ curl -X POST    -H 'Content-Type: text/plain' http://localhost/foobar
+# should return the processed value ("some value for bar" e.g.)
+
+$ curl -X POST    -H 'Content-Type: application/json' -d '{"inputs":[{"css":".foo { font-weight:bold; }"}]}' http://localhost/foobar
+# should return: {"outputs": [{"bar": "some value for bar"}]}
+
+$ curl -X OPTIONS -H 'Content-Type: text/plain' http://localhost/foobar
+# should return usage text like 'Usage: foo &lt;dir&gt; &lt;file&gt;' e.g. (see top of this page)
+
+$ curl -X OPTIONS -H 'Content-Type: application/json' http://localhost/foobar
+# should return a json schema like so:
+# {
+#     name: String
+#     url: String
+#     description: String
+#     inputs: {
+#         name: String
+#         type: String (Array, String, Number, Boolean)
+#         description: String
+#         optional?: Boolean
+#         default?: Any
+#     }
+#     outputs: {
+#         name: String
+#         type: String (Array, String, Number, Boolean)
+#         description: String
+#     }
+# }
+
+$ curl -X TRACE http://localhost/foobar 
+# debugs / runs unit test(s) e.g.
+</code></pre>
+
+<p>However, this multi-in multi-out-assumption of the specs doesnt really fit my needs, therefore for practical reasons contenttypes 'text/plain' and 'text/html' default to single-textinput single-textoutput..the default behaviour of any webserver.</p>
+
+<h3>
+<a name="further-thoughts" class="anchor" href="#further-thoughts"><span class="octicon octicon-link"></span></a>Further Thoughts</h3>
+
+<ul>
+<li>webpipe is easy to scale</li>
+<li>install once, usable anywhere</li>
+<li>centralize certain functionality on certain server</li>
+<li>prevent a developer becoming 'the guy' within a team</li>
+<li>teams dont need graphical user interfaces</li>
+<li>teams need something pipable</li>
+<li>prevents a large codebase </li>
+<li>spread domainknowledge across webpipes instead of bundling in 1 codebase</li>
+<li>webpipes need tests</li>
+<li>webpipes need to notify a central place in case of problems .e.g</li>
+</ul>
       </section>
     </div>
 
