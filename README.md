@@ -3,14 +3,12 @@ Webpipe.bash
 
 Webpipes empower your bash-environment with remote executed applications, aka Bash in the Cloud.
 
-<center><img alt="" src="http://media1.giphy.com/media/MVlRUmPRsAnRe/200.gif"/></center>
-
 ### Why
 
 Write less html-interfaces, write more glue.
 Mashup your webpipes, mashup your api.
 
-<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe.png"/>
+<center><img alt="" src="http://media1.giphy.com/media/MVlRUmPRsAnRe/200.gif"/></center>
 
 ### Example of a webpipe
 
@@ -39,6 +37,10 @@ Execute it:
 
 Would you believe this just happened in the cloud?
 Well it did..
+
+### How it works
+
+<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe.png"/>
 
 ### Installation
 
