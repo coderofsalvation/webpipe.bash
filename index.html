@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Webpipe.bash : extend your bash using webpipes, aka bash-in-the-cloud" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Webpipe.bash</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/coderofsalvation/webpipe.bash">View on GitHub</a>
+
+          <h1 id="project_title">Webpipe.bash</h1>
+          <h2 id="project_tagline">extend your bash using webpipes, aka bash-in-the-cloud</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/coderofsalvation/webpipe.bash/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/coderofsalvation/webpipe.bash/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="webpipebash-" class="anchor" href="#webpipebash-"><span class="octicon octicon-link"></span></a>Webpipe.bash </h1>
+
+<p>Webpipes empower your bash-environment with remote executed applications, aka Bash in the Cloud.</p>
+
+<p></p><img alt="" src="http://media1.giphy.com/media/MVlRUmPRsAnRe/200.gif"><h3>
+<a name="why" class="anchor" href="#why"><span class="octicon octicon-link"></span></a>Why</h3>
+
+<p>Write less html-interfaces, write more glue.
+Mashup your webpipes, mashup your api.</p>
+
+<p><img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe.png"></p>
+
+<h3>
+<a name="example-of-a-webpipe" class="anchor" href="#example-of-a-webpipe"><span class="octicon octicon-link"></span></a>Example of a webpipe</h3>
+
+<p>Show usage:</p>
+
+<pre><code>Usage: echo &lt;xmltext&gt; | xpath &lt;xpath&gt; [options]
+
+prints values from xml based on given xpath (can be commaseperated)
+
+Options:
+     --dumppath          dump xpath instead of values 
+     --dumppathvalues    dump xpath with values 
+     --manual            show examples/syntax
+     --html              input is html instead of xml
+     --source            dont strip tags 
+
+Examples:
+  echo '&lt;xml&gt;&lt;foo&gt;&lt;bar&gt;123&lt;/bar&gt;&lt;/foo&gt;&lt;/xml&gt;' | xpath //foo/bar
+  echo '&lt;xml&gt;&lt;foo&gt;&lt;bar&gt;123&lt;/bar&gt;&lt;/foo&gt;&lt;/xml&gt;' | xpath //* --dumppath
+  echo '&lt;xml&gt;&lt;foo&gt;&lt;bar&gt;123&lt;/bar&gt;&lt;/foo&gt;&lt;/xml&gt;' | xpath //* --dumppathvalues
+</code></pre>
+
+<p>Execute it:</p>
+
+<pre><code>$ cat foo.xml | xpath //order/customer/name
+John Doe
+</code></pre>
+
+<p>Would you believe this just happened in the cloud?
+Well it did..</p>
+
+<h3>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Its very simple, first get webpipe.bash</p>
+
+<pre><code>wget https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe
+</code></pre>
+
+<p>Now the only thing you need to do is index some online webpipes:</p>
+
+<pre><code>source webpipe
+webpipe::index http://neon-semiotics-490.appspot.com
+</code></pre>
+
+<p>Done! Now you can just use 'xpath --help' in your terminal as if it were a local binary.</p>
+
+<h3>
+<a name="indexing-a-single-webpipe" class="anchor" href="#indexing-a-single-webpipe"><span class="octicon octicon-link"></span></a>Indexing a single webpipe</h3>
+
+<p>You can also import a batch of webpipes all at once like this:</p>
+
+<pre><code>source webpipe
+webpipe::set webpipe http://localhost/mypipe
+</code></pre>
+
+<p>Voila..now mypipe is indexed..</p>
+
+<p><code>HINT: you can put the above in your ~/.bashrc</code></p>
+
+<p>Finally, check which webpipes are indexed:</p>
+
+<pre><code>$ webpipe::list
+http://localhost/mypipe
+http://neon-semiotics-490.appspot.com/xpath
+http://neon-semiotics-490.appspot.com/cssselect
+http://neon-semiotics-490.appspot.com/csv2json
+http://neon-semiotics-490.appspot.com/json2csv
+http://neon-semiotics-490.appspot.com/json_print_r
+http://neon-semiotics-490.appspot.com/jsonpath
+http://neon-semiotics-490.appspot.com/markdown
+http://neon-semiotics-490.appspot.com/striphtml
+http://neon-semiotics-490.appspot.com/url2html
+http://neon-semiotics-490.appspot.com/xml2json
+http://foo.bar.com/mycommand
+http://foo.bar.com/sendmail
+http://foo.bar.com/notifypentagon
+http://foo.bar.com/makecoffee
+http://foo.bar.com/notifypentagon
+</code></pre>
+
+<h3>
+<a name="how-can-i-build-my-own-webpipes-in-the-cloud" class="anchor" href="#how-can-i-build-my-own-webpipes-in-the-cloud"><span class="octicon octicon-link"></span></a>How can I build my own webpipes in the cloud?</h3>
+
+<p>Simple, a webpipe is just a weburl which listens to a POST-request (for data) or OPTIONS-request (for displaying help).</p>
+
+<p>For php there's this skeleton <a href="https://github.com/coderofsalvation/webpipe.bash.php">repository</a></p>
+
+<h3>
+<a name="projects-using-webpipebash" class="anchor" href="#projects-using-webpipebash"><span class="octicon octicon-link"></span></a>Projects using webpipe.bash</h3>
+
+<ul>
+<li>bashlive.com ( supernatural livecoding using bash )</li>
+</ul><h3>
+<a name="security" class="anchor" href="#security"><span class="octicon octicon-link"></span></a>Security</h3>
+
+<p>Sourcing output of remote procedures from untrusted sources is never adviced.
+However, in case your webpipes needs authorisation (.htaccess .htpasswd e.g.) run, decorate the curl calls with this:</p>
+
+<pre><code>webpipe::set curloptions http://foo.com "-user foo:bar"
+</code></pre>
+
+<p>By doing so, the webpipe (called by curl) will pass authorisation info.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Webpipe.bash maintained by <a href="https://github.com/coderofsalvation">coderofsalvation</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
