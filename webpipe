@@ -20,6 +20,7 @@ declare -A CURL_OPTIONS
 declare -A WEBPIPES 
 TMPDIR=~/.webpipe/cache
 TMPFILE=~/.webpipe/.$(whoami).tmp
+WEBPIPESOURCED="$(date +%s)"
 [[ ! -d $TMPDIR ]] && mkdir -p $TMPDIR
 
 webpipe::set(){
@@ -79,14 +80,19 @@ webpipe::get(){
 }
 
 webpipe::index(){
-  domain="$(webpipe::get_domain "$1")"; hash="$(echo "$1" | md5sum | sed 's/ .*//g')"
-  # declare -A CURL_OPTIONS # bash bug? we need to do this again
-  curloptions="${CURL_OPTIONS["$domain"]}"
-  pipes="$(curl -L -s ${curloptions} "$1")"; (( $? > 0 )) && { echo "could not fetch $url"; return 1; }
-  if [[ "$pipes" =~ "<" ]] || [[ "$pipes" =~ "{" ]]; then echo "$pipes"; return 1; fi 
-  echo "$pipes" > $TMPDIR/$hash
+  domain="$(webpipe::get_domain "$1")"; hash="$(echo "$1" | md5sum | sed 's/ .*//g')"; now="$(date +%s)"
+  if [[ ! $- =~ "i" ]] || [[ $((now-WEBPIPESOURCED)) < 1 ]] && [[ -f $TMPDIR/$hash ]]; then 
+    # re-use cache when noninteractive
+    pipes="$(cat $TMPDIR/$hash)"
+  else
+    # declare -A CURL_OPTIONS # bash bug? we need to do this again
+    curloptions="${CURL_OPTIONS["$domain"]}"
+    pipes="$(curl -L -s ${curloptions} "$1")"; (( $? > 0 )) && { echo "could not fetch $url"; return 1; }
+    if [[ "$pipes" =~ "<" ]] || [[ "$pipes" =~ "{" ]]; then echo "$pipes"; return 1; fi 
+    echo "$pipes" > $TMPDIR/$hash
+  fi
   while read url; do 
-    [[ $- =~ "i" ]] && echo "webpipe> adding $url"
+    [[ $- =~ "i" ]] && [[ $((now-WEBPIPESOURCED)) > 1 ]] && echo "webpipe> adding $url"
     webpipe::set webpipe "$url"
   done < $TMPDIR/$hash
 }
@@ -94,8 +100,3 @@ webpipe::index(){
 webpipe::list(){
   for webpipe in "${WEBPIPES[@]}"; do echo "$webpipe"; done
 }
-
-webpipe::indexcache(){
-  cat $TMPDIR/* | while read line; do webpipe::set webpipe "$line"; done
-}
-
