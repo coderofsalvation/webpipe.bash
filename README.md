@@ -66,7 +66,12 @@ You can also import a batch of webpipes all at once like this:
 
 Voila..now mypipe is indexed..
 
-`HINT: you can put the above in your ~/.bashrc`
+### Always anywhere
+
+Put this in your .bashrc :
+
+    source ~/bin/webpipe 
+    webpipe::indexcache                   # this loads webpipes from cache (faster)
 
 ### Show webpipes
 

@@ -18,9 +18,12 @@
 # this will hold specific curl options (when webpipes need authorisation)
 declare -A CURL_OPTIONS
 declare -A WEBPIPES 
-TMPFILE="/tmp/.$(whoami).webpipe"
+TMPDIR=~/.webpipe/cache
+TMPFILE=~/.webpipe/.$(whoami).tmp
+[[ ! -d $TMPDIR ]] && mkdir -p $TMPDIR
 
 webpipe::set(){
+  [[ ${#1} == 0 ]] && echo "Usage: webpipe::set <cmd> <arg>" && return 1;
   case "$1" in
     curloptions) CURL_OPTIONS["$2"]="$3"      ;;
     webpipe)    cmd="$(basename $2)"; WEBPIPES["$cmd"]="$2"; alias $cmd="webpipe::get $cmd";;
@@ -76,19 +79,23 @@ webpipe::get(){
 }
 
 webpipe::index(){
-  domain="$(webpipe::get_domain "$1")"
+  domain="$(webpipe::get_domain "$1")"; hash="$(echo "$1" | md5sum | sed 's/ .*//g')"
   # declare -A CURL_OPTIONS # bash bug? we need to do this again
   curloptions="${CURL_OPTIONS["$domain"]}"
   pipes="$(curl -L -s ${curloptions} "$1")"; (( $? > 0 )) && { echo "could not fetch $url"; return 1; }
   if [[ "$pipes" =~ "<" ]] || [[ "$pipes" =~ "{" ]]; then echo "$pipes"; return 1; fi 
-  echo "$pipes" > $TMPFILE
+  echo "$pipes" > $TMPDIR/$hash
   while read url; do 
-    echo "webpipe> adding $url"
+    [[ $- =~ "i" ]] && echo "webpipe> adding $url"
     webpipe::set webpipe "$url"
-  done < $TMPFILE
+  done < $TMPDIR/$hash
 }
 
 webpipe::list(){
   for webpipe in "${WEBPIPES[@]}"; do echo "$webpipe"; done
+}
+
+webpipe::indexcache(){
+  cat $TMPDIR/* | while read line; do webpipe::set webpipe "$line"; done
 }
 
