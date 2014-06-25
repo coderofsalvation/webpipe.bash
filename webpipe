@@ -18,10 +18,10 @@
 # this will hold specific curl options (when webpipes need authorisation)
 declare -A CURL_OPTIONS
 declare -A WEBPIPES 
-TMPDIR=~/.webpipe/cache
-TMPFILE=~/.webpipe/.$(whoami).tmp
-WEBPIPESOURCED="$(date +%s)"
-[[ ! -d $TMPDIR ]] && mkdir -p $TMPDIR
+WEBPIPE_TMPDIR=~/.webpipe/cache
+WEBPIPE_TMPFILE=~/.webpipe/.$(whoami).tmp
+WEBPIPE_SOURCED="$(date +%s)"
+[[ ! -d $WEBPIPE_TMPDIR ]] && mkdir -p $WEBPIPE_TMPDIR
 
 webpipe::set(){
   [[ ${#1} == 0 ]] && echo "Usage: webpipe::set <cmd> <arg>" && return 1;
@@ -73,7 +73,7 @@ webpipe::get(){
   [[ "${#url}" == 0   ]] && return 1;
   [[ "$2" == "--help" ]] && method="-X OPTIONS" || method="-X POST"
   [[ ! -n $OUTPUT     ]] && type="text/plain" || type="$OUTPUT"
-  [[ -t 0 ]] && POST="" || { cat - > $TMPFILE.post; POST="@$TMPFILE.post"; }
+  [[ -t 0 ]] && POST="" || { cat - > $WEBPIPE_TMPFILE.post; POST="@$WEBPIPE_TMPFILE.post"; }
   [[ "${#POST}" == "0" ]] && method="-X GET"
   curl -L -s ${method} ${curloptions} -d "$POST" -H "Content-Type: $type" "$url$getstr"
   return $?
@@ -81,20 +81,20 @@ webpipe::get(){
 
 webpipe::index(){
   domain="$(webpipe::get_domain "$1")"; hash="$(echo "$1" | md5sum | sed 's/ .*//g')"; now="$(date +%s)"
-  if [[ ! $- =~ "i" ]] || [[ $((now-WEBPIPESOURCED)) < 1 ]] && [[ -f $TMPDIR/$hash ]]; then 
+  if [[ ! $- =~ "i" ]] || [[ $((now-WEBPIPE_SOURCED)) < 1 ]] && [[ -f $WEBPIPE_TMPDIR/$hash ]]; then 
     # re-use cache when noninteractive
-    pipes="$(cat $TMPDIR/$hash)"
+    pipes="$(cat $WEBPIPE_TMPDIR/$hash)"
   else
     # declare -A CURL_OPTIONS # bash bug? we need to do this again
     curloptions="${CURL_OPTIONS["$domain"]}"
     pipes="$(curl -L -s ${curloptions} "$1")"; (( $? > 0 )) && { echo "could not fetch $url"; return 1; }
     if [[ "$pipes" =~ "<" ]] || [[ "$pipes" =~ "{" ]]; then echo "$pipes"; return 1; fi 
-    echo "$pipes" > $TMPDIR/$hash
+    echo "$pipes" > $WEBPIPE_TMPDIR/$hash
   fi
   while read url; do 
-    [[ $- =~ "i" ]] && [[ $((now-WEBPIPESOURCED)) > 1 ]] && echo "webpipe> adding $url"
+    [[ $- =~ "i" ]] && [[ $((now-WEBPIPE_SOURCED)) > 1 ]] && echo "webpipe> adding $url"
     webpipe::set webpipe "$url"
-  done < $TMPDIR/$hash
+  done < $WEBPIPE_TMPDIR/$hash
 }
 
 webpipe::list(){
