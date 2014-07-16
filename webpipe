@@ -65,16 +65,28 @@ webpipe::args2http(){
 }
 
 webpipe::get(){
-  url="${WEBPIPES[$1]}";
+  url="${WEBPIPES[$1]}"; getstr=""
   domain="$(webpipe::get_domain "$url")"
-  # declare -A CURL_OPTIONS # bash bug? we need to do this again
+  # declare -A CURL_OPTIONS                              # bash bug? we need to do this again
   curloptions="${CURL_OPTIONS["$domain"]}"
-  shift; getstr="$(webpipe::args2http "$@")"
+  shift; [[ ! -f "$1" ]] && getstr="$(webpipe::args2http "$@")"
   [[ "${#url}" == 0   ]] && return 1;
   [[ "$2" == "--help" ]] && method="-X OPTIONS" || method="-X POST"
   [[ ! -n $OUTPUT     ]] && type="text/plain" || type="$OUTPUT"
-  [[ -t 0 ]] && POST="" || { cat - > $WEBPIPE_TMPFILE.post; POST="@$WEBPIPE_TMPFILE.post"; }
+  [[ -t 0 ]] && POST="" || { 
+    if [[ -f "$1" ]]; then                                 # read/send jsonfile when json payload file is given
+      payload="$(cat "$1" | sed ':a;N;$!ba;s/\n//g' )"
+      pipedata="$(cat -)"; pipedata="${pipedata//\"/\\\"}"
+      payload="${payload/\$pipe/$pipedata}"
+      echo "$payload" > $WEBPIPE_TMPFILE.post 
+      OUTPUT="application/json"
+     else                                                  # or else just convert piped data to postfile
+      cat - > $WEBPIPE_TMPFILE.post; 
+    fi 
+    POST="@$WEBPIPE_TMPFILE.post"; 
+  }
   [[ "${#POST}" == "0" ]] && method="-X GET"
+  echo "$url$getstr"
   curl -L -s ${method} ${curloptions} -d "$POST" -H "Content-Type: $type" "$url$getstr"
   return $?
 }

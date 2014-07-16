@@ -93,6 +93,24 @@ Put this in your .bashrc :
     http://foo.bar.com/makecoffee
     http://foo.bar.com/notifypentagon
 
+### But I'm in love with JSON!
+
+The commandline is great, but at some point JSON becomes preferrable (to avoid complex oneliners).
+Lets take the xpath example above, and hide our complexity in a json payload file:
+
+      $ cat > payload.json
+      {
+        "path": "//order/customer/name"
+        "input": "$pipe"
+      }
+      (CTRL-D)
+
+      $ cat foo.xml | xpath payload.json 
+      John Doe
+
+Webpipe.bash will now do a POST-request with content-type 'application/json' because of
+the jsonfile as the first argument.
+
 ### How can I build my own webpipes in the cloud?
 
 Simple, a webpipe is just a weburl which listens to a POST-request (for data) or OPTIONS-request (for displaying help).
