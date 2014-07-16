@@ -5,6 +5,7 @@ Webpipes empower your bash-environment with remote executed applications, aka Ba
 
 ### Why
 
+Explore the possibilities to bridge bash and webapplications.
 Write less html-interfaces, write more glue.
 Mashup your webpipes, mashup your api.
 
@@ -179,6 +180,39 @@ Some examples:
 
 However, this multi-in multi-out-assumption of the specs doesnt really fit my needs, therefore for practical reasons contenttypes 'text/plain' and 'text/html' default to single-textinput single-textoutput..the default behaviour of any webserver.
 
+### Commandline argument to getarguments
+
+By default webpipe.bash will send http using the 'text/plain'-content-type.
+Positional parameters will be converted to GET variable '1' / '2' and so on, like so:
+
+    mywebpipe somevar --foo bar --foo2 bar2
+
+In the webpipe itself this will be received as GET variables:
+
+    '1': 'somevar',
+    'foo': 'bar',
+    'foo2': 'bar2'
+
+This makes it easy to start developing a webpipe by using webpipe.bash as a startingpoint:
+
+    $ webpipe::set webpipe http://localhost/mynewwebpipe
+    $ mynewwebpipe hellowrodl --foo bar 
+    <html>
+      404 Not found
+      method:   GET
+      Get args: '1'   => hellowrodl
+                'foo' => bar
+    </html>
+
+    $ echo "fooo" | mynewwebpipe hellowrodl --foo bar 
+    <html>
+      404 Not found
+      method:   POST
+      Get args: '1'   => hellowrodl
+                'foo' => bar
+      Post payload: 'foooo'                
+    </html>
+
 ### Further Thoughts
 
 * webpipe is easy to scale
@@ -189,5 +223,6 @@ However, this multi-in multi-out-assumption of the specs doesnt really fit my ne
 * teams need something pipable
 * prevents a large codebase 
 * spread domainknowledge across webpipes instead of bundling in 1 codebase
+* bash can be an interface between programmers with different backgrounds
 * webpipes need tests
 * webpipes need to notify a central place in case of problems .e.g
