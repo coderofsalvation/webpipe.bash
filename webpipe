@@ -71,23 +71,24 @@ webpipe::get(){
   curloptions="${CURL_OPTIONS["$domain"]}"
   shift; [[ ! -f "$1" ]] && getstr="$(webpipe::args2http "$@")"
   [[ "${#url}" == 0   ]] && return 1;
-  [[ "$2" == "--help" ]] && method="-X OPTIONS" || method="-X POST"
-  [[ ! -n $OUTPUT     ]] && type="text/plain" || type="$OUTPUT"
+  [[ "$2" == "--help" ]] && X="OPTIONS" || {
+    [[ ! -n $X ]] && X="POST";
+  }
+  [[ ! -n $TYPE ]] && type="text/plain" || type="$TYPE"
   [[ -t 0 ]] && POST="" || { 
     if [[ -f "$1" ]]; then                                 # read/send jsonfile when json payload file is given
-      payload="$(cat "$1" | sed ':a;N;$!ba;s/\n//g' )"
-      pipedata="$(cat -)"; pipedata="${pipedata//\"/\\\"}"
-      payload="${payload/\$pipe/$pipedata}"
-      echo "$payload" > $WEBPIPE_TMPFILE.post 
-      OUTPUT="application/json"
+       payload="$(cat "$1" | sed ':a;N;$!ba;s/\n//g' )"
+       pipedata="$(cat -)"; pipedata="${pipedata//\"/\\\"}"
+       payload="${payload/\$pipe/$pipedata}"
+       echo "$payload" > $WEBPIPE_TMPFILE.post 
+       type="application/json"
      else                                                  # or else just convert piped data to postfile
-      cat - > $WEBPIPE_TMPFILE.post; 
+       cat - > $WEBPIPE_TMPFILE.post; 
     fi 
     POST="@$WEBPIPE_TMPFILE.post"; 
   }
-  [[ "${#POST}" == "0" ]] && method="-X GET"
-  echo "$url$getstr"
-  curl -L -s ${method} ${curloptions} -d "$POST" -H "Content-Type: $type" "$url$getstr"
+  [[ "${#POST}" == "0" ]] && X="GET"
+  curl -L -s -X $X ${curloptions} -d "$POST" -H "Content-Type: $type" "$url$getstr"
   return $?
 }
 

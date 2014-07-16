@@ -93,9 +93,9 @@ Put this in your .bashrc :
     http://foo.bar.com/makecoffee
     http://foo.bar.com/notifypentagon
 
-### But I'm in love with JSON!
+### But I'm in love with JSON/REST!
 
-The commandline is great, but at some point JSON becomes preferrable (to avoid complex oneliners).
+The commandline is great, but indeed at some point JSON becomes preferrable (to avoid complex oneliners).
 Lets take the xpath example above, and hide our complexity in a json payload file:
 
       $ cat > payload.json
@@ -110,6 +110,11 @@ Lets take the xpath example above, and hide our complexity in a json payload fil
 
 Webpipe.bash will now do a POST-request with content-type 'application/json' because of
 the jsonfile as the first argument.
+Other example to play with API's etc:
+
+    $ cat foo.xml | X=DELETE TYPE="application/soap+xml" somewebpipe payload.json
+
+But this is not really the focus of webpipes, see [RESTY](https://github.com/micha/resty) for easily testing REST api's and such.
 
 ### How can I build my own webpipes in the cloud?
 
