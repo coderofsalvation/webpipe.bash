@@ -5,7 +5,7 @@ Webpipes empower your bash-environment with remote executed applications, aka Ba
 
 ### Why
 
-Explore the possibilities to bridge bash and webapplications.
+Expose your webapplication as unix commands.
 Write less html-interfaces, write more glue.
 Mashup your webpipes, mashup your api.
 
@@ -94,10 +94,17 @@ Put this in your .bashrc :
     http://foo.bar.com/makecoffee
     http://foo.bar.com/notifypentagon
 
-### But I'm in love with JSON/REST!
+### How can I build my own webpipes in the cloud?
 
-The commandline is great, but indeed at some point JSON becomes preferrable (to avoid complex oneliners).
-Lets take the xpath example above, and hide our complexity in a json payload file:
+Simple, a webpipe is just a weburl which listens to a POST-request (for data) or OPTIONS-request (for displaying help).
+
+For php there's this skeleton [repository](https://github.com/coderofsalvation/webpipe.bash.php)
+
+### But I'm in love with JSON/
+
+The commandline is great, but yes, at some point JSON becomes preferrable (to avoid complex oneliners).
+Lets take the xpath example above, imagine we have 10 other arguments.
+In that case it might be handy to hide our complexity in a json payload file:
 
       $ cat > payload.json
       {
@@ -109,19 +116,27 @@ Lets take the xpath example above, and hide our complexity in a json payload fil
       $ cat foo.xml | xpath payload.json 
       John Doe
 
-Webpipe.bash will now do a POST-request with content-type 'application/json' because of
-the jsonfile as the first argument.
-Other example to play with API's etc:
+Whenever the first argument is a jsonfile, Webpipe.bash will do a POST-request with content-type 'application/json'.
+
+### Capture/Replay
+
+You can inspect your payload anywhere in the pipeline.
+
+    $ cat foo.xml | CAPTURE=1 log --job | filter --inactive --retired | CAPTURE=1 xpath payload.json 
+    written 'log.payload.10928391.json'
+    written 'xpath.payload.10928392.json'
+
+And replay it (usefull for testing/debugging):
+
+    $ log log.payload.10928391.json
+    $ xpath xpath.payload.10928391.json
+
+### RESTful?
+
+So this is not really the focus of webpipes, see [RESTY](https://github.com/micha/resty) for easily testing REST api's and such.
+Anyways, if you still want to do it:
 
     $ cat foo.xml | X=DELETE TYPE="application/soap+xml" somewebpipe payload.json
-
-But this is not really the focus of webpipes, see [RESTY](https://github.com/micha/resty) for easily testing REST api's and such.
-
-### How can I build my own webpipes in the cloud?
-
-Simple, a webpipe is just a weburl which listens to a POST-request (for data) or OPTIONS-request (for displaying help).
-
-For php there's this skeleton [repository](https://github.com/coderofsalvation/webpipe.bash.php)
 
 ### Projects using webpipe.bash 
 
@@ -224,5 +239,6 @@ This makes it easy to start developing a webpipe by using webpipe.bash as a star
 * prevents a large codebase 
 * spread domainknowledge across webpipes instead of bundling in 1 codebase
 * bash can be an interface between programmers with different backgrounds
+* unix pipelining is a service bus in certain perspective
 * webpipes need tests
 * webpipes need to notify a central place in case of problems .e.g
