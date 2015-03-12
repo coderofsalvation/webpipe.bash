@@ -77,28 +77,45 @@ Put this in your .bashrc :
 ### Show webpipes
 
     $ webpipe::list
-    http://localhost/mypipe
-    http://neon-semiotics-490.appspot.com/xpath
-    http://neon-semiotics-490.appspot.com/cssselect
-    http://neon-semiotics-490.appspot.com/csv2json
-    http://neon-semiotics-490.appspot.com/json2csv
-    http://neon-semiotics-490.appspot.com/json_print_r
-    http://neon-semiotics-490.appspot.com/jsonpath
-    http://neon-semiotics-490.appspot.com/markdown
-    http://neon-semiotics-490.appspot.com/striphtml
-    http://neon-semiotics-490.appspot.com/url2html
-    http://neon-semiotics-490.appspot.com/xml2json
-    http://foo.bar.com/mycommand
-    http://foo.bar.com/sendmail
-    http://foo.bar.com/notifypentagon
-    http://foo.bar.com/makecoffee
-    http://foo.bar.com/notifypentagon
+    mypipe         -> http://localhost/mypipe
+    xpath          -> http://neon-semiotics-490.appspot.com/xpath
+    cssselect      -> http://neon-semiotics-490.appspot.com/cssselect
+    csv2json       -> http://neon-semiotics-490.appspot.com/csv2json
+    json2csv       -> http://neon-semiotics-490.appspot.com/json2csv
+    json_print_r   -> http://neon-semiotics-490.appspot.com/json_print_r
+    jsonpath       -> http://neon-semiotics-490.appspot.com/jsonpath
+    markdown       -> http://neon-semiotics-490.appspot.com/markdown
+    striphtml      -> http://neon-semiotics-490.appspot.com/striphtml
+    url2html       -> http://neon-semiotics-490.appspot.com/url2html
+    xml2json       -> http://neon-semiotics-490.appspot.com/xml2json
+    mycommand      -> http://foo.bar.com/mycommand
+    sendmail       -> http://foo.bar.com/sendmail
+    notifypentagon -> http://foo.bar.com/notifypentagon
+    makecoffee     -> http://foo.bar.com/makecoffee
+    notifypentagon -> http://foo.bar.com/notifypentagon
+
+### Reset 
+
+Reset all your indexed webpipes
+
+    webpipe::reset
 
 ### How can I build my own webpipes in the cloud?
 
 Simple, a webpipe is just a weburl which listens to a POST-request (for data) or OPTIONS-request (for displaying help).
 
-For php there's this skeleton [repository](https://github.com/coderofsalvation/webpipe.bash.php)
+Basically all GET-, POST- etc arguments are combined into one object, which processed by the webpipe.
+The webpipe returns output which suits the content-type.
+So with 'application/json':
+
+    {"output":["foo","bar"]}
+
+Could be with 'text/plain' (a unix webpipe)
+
+    foo
+    bar
+
+For php there's this skeleton [repository](https://github.com/coderofsalvation/webpipe.bash.php).
 
 ### But I'm in love with JSON/
 
@@ -133,14 +150,36 @@ And replay it (usefull for testing/debugging):
 
 ### RESTful?
 
-So this is not really the focus of webpipes, see [RESTY](https://github.com/micha/resty) for easily testing REST api's and such.
-Anyways, if you still want to do it:
-
     $ cat foo.xml | X=DELETE TYPE="application/soap+xml" somewebpipe payload.json
+
+However, this is not really the focus of webpipes, see [RESTY](https://github.com/micha/resty) for easily testing REST api's and such.
+
+### Basic design of UNIX webpipe
+
+Webpipes usually work with 'application/json' which is fine.
+But unix output (tab-delimited e.g.) can be implemented by listening to content-type 'text/plain':
+    
+    $ mywebpipe foobar --foo bar
+
+would result in a 'text/plain' GET-request:
+
+<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/unixwebpipe-get.png"/>
+
+    $ cat foo.json | webpipe --foo bar 
+
+would result in a 'text/plain' POST-request:    
+
+<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/unixwebpipe-post.png"/>
+
+    $ mywebpipe
+    Usage: mywebpipe <arg> [-foo <str>]
+ 
+This would result in an 'text/plain' OPTIONS-request (which should return information on usage)
+
 
 ### Projects using webpipe.bash 
 
-* bashlive.com ( supernatural livecoding using bash )
+* www.bashlive.com ( supernatural livecoding using bash )
 
 ### Security
 

@@ -21,14 +21,21 @@ declare -A WEBPIPES
 WEBPIPE_TMPDIR=~/.webpipe/cache
 WEBPIPE_TMPFILE=~/.webpipe/.$(whoami).tmp
 WEBPIPE_SOURCED="$(date +%s)"
+C_NORMAL="\\033[0;0m" 
+C_BRIGHT="\\033[1;36m"
+
 [[ ! -d $WEBPIPE_TMPDIR ]] && mkdir -p $WEBPIPE_TMPDIR
 
 webpipe::set(){
   [[ ${#1} == 0 ]] && echo "Usage: webpipe::set <cmd> <arg>" && return 1;
   case "$1" in
     curloptions) CURL_OPTIONS["$2"]="$3"      ;;
-    webpipe)    cmd="$(basename $2)"; WEBPIPES["$cmd"]="$2"; alias $cmd="webpipe::get $cmd";;
+    webpipe)    cmd="${cmd/\/$/}"; cmd="$(basename "$2")"; WEBPIPES["$cmd"]="$2"; alias "$cmd"="webpipe::get $cmd";;
   esac
+}
+
+webpipe::reset(){
+  WEBPIPES=()
 }
 
 urlencode() {
@@ -65,29 +72,38 @@ webpipe::args2http(){
 }
 
 webpipe::get(){
-  url="${WEBPIPES[$1]}"; getstr=""; POST=""; X=POST
+  name="$1"; url="${WEBPIPES[$1]}"; getstr=""; POST=""; X=POST
+  WEBPIPE_TMPFILE=~/.webpipe/.$(whoami).tmp.$name.$(date +%s%N) # prevent race-condition when piping
+  :> $WEBPIPE_TMPFILE.post; payload="";
   domain="$(webpipe::get_domain "$url")"
-  # declare -A CURL_OPTIONS                              # bash bug? we need to do this again
+  # declare -A CURL_OPTIONS                                     # bash bug? we need to do this again
   curloptions="${CURL_OPTIONS["$domain"]}"
   shift; [[ ! -f "$1" ]] && getstr="$(webpipe::args2http "$@")"
   [[ "${#url}" == 0   ]] && return 1;
-  [[ "$2" == "--help" ]] && X="OPTIONS" || {
-    [[ ! -n $X ]] && X="POST";
-  }
+  [[ "$2" == "--help" ]] && X="OPTIONS";
+  [[ ! -n "$1"        ]] && X="OPTIONS";
   [[ ! -n $TYPE ]] && type="text/plain" || type="$TYPE"
-  [[ -t 0 ]] && X="GET" || { 
-    if [[ -f "$1" ]]; then                                 # read/send jsonfile when json payload file is given
-       payload="$(cat "$1" | sed ':a;N;$!ba;s/\n//g' )"
-       pipedata="$(cat -)"; pipedata="${pipedata//\"/\\\"}"
-       payload="${payload/\$pipe/$pipedata}"
-       echo "$payload" > $WEBPIPE_TMPFILE.post 
-       type="application/json"
-     else                                                  # or else just convert piped data to postfile
-       cat - > $WEBPIPE_TMPFILE.post; 
-    fi 
-    POST="@$WEBPIPE_TMPFILE.post"; 
+  if [[ -f "$1" ]]; then                                  # read/send jsonfile when json payload file is given
+    payload="$(cat "$1" | sed ':a;N;$!ba;s/\n//g' )"
+    [[ ! -t 0 ]] && {
+      pipedata="$(cat - | base64 )";
+      payload="${payload/\$pipe/$pipedata}"
+    }
+    echo "$payload" > $WEBPIPE_TMPFILE.post 
+    type="application/json"
+  elif [[ -t 0 ]]; then 
+    X=GET; 
+  else 
+    cat - > $WEBPIPE_TMPFILE.post; 
+  fi
+  [[ -n $CAPTURE ]] && { 
+    destfile="$name.payload.$(date +%s).json"; 
+    cp $WEBPIPE_TMPFILE.post $destfile &&
+    echo "written $destfile" 1>&2;
   }
+  [[ ! $X == "GET" ]] && POST="@$WEBPIPE_TMPFILE.post" || POST=""; 
   curl -L -s -X $X ${curloptions} -d "$POST" -H "Content-Type: $type" "$url$getstr"
+  [[ -f "$WEBPIPE_TMPFILE.post" ]] && rm "$WEBPIPE_TMPFILE.post"
   return $?
 }
 
@@ -103,12 +119,12 @@ webpipe::index(){
     if [[ "$pipes" =~ "<" ]] || [[ "$pipes" =~ "{" ]]; then echo "$pipes"; return 1; fi 
     echo "$pipes" > $WEBPIPE_TMPDIR/$hash
   fi
-  while read url; do 
+  while read url; do  # not sure why we do this 
     [[ $- =~ "i" ]] && [[ $((now-WEBPIPE_SOURCED)) > 1 ]] && echo "webpipe> adding $url"
     webpipe::set webpipe "$url"
   done < $WEBPIPE_TMPDIR/$hash
 }
 
 webpipe::list(){
-  for webpipe in "${WEBPIPES[@]}"; do echo "$webpipe"; done
+  for webpipe in "${!WEBPIPES[@]}"; do printf "$C_BRIGHT""%-20s $C_NORMAL -> %s\n" "$webpipe" "${WEBPIPES[$webpipe]}"; done
 }
