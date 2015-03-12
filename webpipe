@@ -81,7 +81,7 @@ webpipe::get(){
   shift; [[ ! -f "$1" ]] && getstr="$(webpipe::args2http "$@")"
   [[ "${#url}" == 0   ]] && return 1;
   [[ "$2" == "--help" ]] && X="OPTIONS";
-  [[ ! -n "$1"        ]] && X="OPTIONS";
+  [[ ! -n "$1"        ]] && [[ -t 0 ]] && X="OPTIONS";
   [[ ! -n $TYPE ]] && type="text/plain" || type="$TYPE"
   if [[ -f "$1" ]]; then                                  # read/send jsonfile when json payload file is given
     payload="$(cat "$1" | sed ':a;N;$!ba;s/\n//g' )"
