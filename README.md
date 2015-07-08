@@ -1,7 +1,7 @@
 Webpipe.bash 
 ============
 
-<center><img alt="" src="https://raw.githubusercontent.com/coderofsalvation/webpipe.bash/master/doc/logo.png"/></center>
+<center><img alt="" src="https://raw.githubusercontent.com/coderofsalvation/webpipe.bash/master/doc/logo.png" style="width:100px"/></center>
 
 Webpipes empower your bash-environment with remote executed applications, aka Bash in the Cloud.
 
