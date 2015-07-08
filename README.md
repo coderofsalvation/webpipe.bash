@@ -1,7 +1,7 @@
 Webpipe.bash 
 ============
 
-<center><img alt="" src="http://media1.giphy.com/media/MVlRUmPRsAnRe/200.gif"/></center>
+<center><img alt="" src="https://raw.githubusercontent.com/coderofsalvation/webpipe.bash/master/doc/logo.png"/></center>
 
 Webpipes empower your bash-environment with remote executed applications, aka Bash in the Cloud.
 
@@ -59,7 +59,7 @@ Well it did..
 
 ### How it works
 
-<img alt="" src="https://raw.githubusercontent.com/coderofsalvation/webpipe.bash/master/doc/logo.png" />
+<img alt="" src="https://raw.githubusercontent.com/coderofsalvation/webpipe.bash/master/doc/webpipe.png" />
 
 ### Indexing a single webpipe
 
