@@ -56,7 +56,7 @@ Well it did..
 
 ### How it works
 
-<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe.png"/>
+<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/doc/webpipe.png"/>
 
 ### Indexing a single webpipe
 
@@ -163,13 +163,13 @@ But unix output (tab-delimited e.g.) can be implemented by listening to content-
 
 would result in a 'text/plain' GET-request:
 
-<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/unixwebpipe-get.png"/>
+<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/doc/unixwebpipe-get.png"/>
 
     $ cat foo.json | webpipe --foo bar 
 
 would result in a 'text/plain' POST-request:    
 
-<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/unixwebpipe-post.png"/>
+<img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/doc/unixwebpipe-post.png"/>
 
     $ mywebpipe
     Usage: mywebpipe <arg> [-foo <str>]
