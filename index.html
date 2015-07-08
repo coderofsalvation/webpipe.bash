@@ -2,9 +2,9 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Webpipe.bash : extend your bash using webpipes, aka bash-in-the-cloud" />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Webpipe.bash : extend your bash using webpipes, aka bash-in-the-cloud">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -31,11 +31,22 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p>Write less html-interfaces, write more glue.
+        <h1>
+<a id="webpipebash-" class="anchor" href="#webpipebash-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Webpipe.bash </h1>
+
+<p>Webpipes empower your bash-environment with remote executed applications, aka Bash in the Cloud.</p>
+
+<h3>
+<a id="why" class="anchor" href="#why" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why</h3>
+
+<p>Expose your webapplication as unix commands.
+Write less html-interfaces, write more glue.
 Mashup your webpipes, mashup your api.</p>
 
-<p></p><img alt="" src="http://media1.giphy.com/media/MVlRUmPRsAnRe/200.gif"><h3>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+<p></p><img alt="" src="http://media1.giphy.com/media/MVlRUmPRsAnRe/200.gif">
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
 
 <p>Its very simple, first get webpipe.bash</p>
 
@@ -51,7 +62,7 @@ webpipe::index http://neon-semiotics-490.appspot.com
 <p>Done! Now you can just use a webpipe in your terminal as if it were a local unix command.</p>
 
 <h3>
-<a name="example-of-a-webpipe" class="anchor" href="#example-of-a-webpipe"><span class="octicon octicon-link"></span></a>Example of a webpipe</h3>
+<a id="example-of-a-webpipe" class="anchor" href="#example-of-a-webpipe" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of a webpipe</h3>
 
 <p>Show usage:</p>
 
@@ -83,12 +94,12 @@ John Doe
 Well it did..</p>
 
 <h3>
-<a name="how-it-works" class="anchor" href="#how-it-works"><span class="octicon octicon-link"></span></a>How it works</h3>
+<a id="how-it-works" class="anchor" href="#how-it-works" aria-hidden="true"><span class="octicon octicon-link"></span></a>How it works</h3>
 
-<p><img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/webpipe.png"></p>
+<p><img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/doc/webpipe.png"></p>
 
 <h3>
-<a name="indexing-a-single-webpipe" class="anchor" href="#indexing-a-single-webpipe"><span class="octicon octicon-link"></span></a>Indexing a single webpipe</h3>
+<a id="indexing-a-single-webpipe" class="anchor" href="#indexing-a-single-webpipe" aria-hidden="true"><span class="octicon octicon-link"></span></a>Indexing a single webpipe</h3>
 
 <p>You can also import a batch of webpipes all at once like this:</p>
 
@@ -98,44 +109,145 @@ webpipe::set webpipe http://localhost/mypipe
 
 <p>Voila..now mypipe is indexed..</p>
 
-<p><code>HINT: you can put the above in your ~/.bashrc</code></p>
-
 <h3>
-<a name="show-webpipes" class="anchor" href="#show-webpipes"><span class="octicon octicon-link"></span></a>Show webpipes</h3>
+<a id="always-anywhere" class="anchor" href="#always-anywhere" aria-hidden="true"><span class="octicon octicon-link"></span></a>Always anywhere</h3>
 
-<pre><code>$ webpipe::list
-http://localhost/mypipe
-http://neon-semiotics-490.appspot.com/xpath
-http://neon-semiotics-490.appspot.com/cssselect
-http://neon-semiotics-490.appspot.com/csv2json
-http://neon-semiotics-490.appspot.com/json2csv
-http://neon-semiotics-490.appspot.com/json_print_r
-http://neon-semiotics-490.appspot.com/jsonpath
-http://neon-semiotics-490.appspot.com/markdown
-http://neon-semiotics-490.appspot.com/striphtml
-http://neon-semiotics-490.appspot.com/url2html
-http://neon-semiotics-490.appspot.com/xml2json
-http://foo.bar.com/mycommand
-http://foo.bar.com/sendmail
-http://foo.bar.com/notifypentagon
-http://foo.bar.com/makecoffee
-http://foo.bar.com/notifypentagon
+<p>Put this in your .bashrc :</p>
+
+<pre><code>source ~/bin/webpipe 
+webpipe::indexcache                   # this loads webpipes from cache (faster)
 </code></pre>
 
 <h3>
-<a name="how-can-i-build-my-own-webpipes-in-the-cloud" class="anchor" href="#how-can-i-build-my-own-webpipes-in-the-cloud"><span class="octicon octicon-link"></span></a>How can I build my own webpipes in the cloud?</h3>
+<a id="show-webpipes" class="anchor" href="#show-webpipes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Show webpipes</h3>
+
+<pre><code>$ webpipe::list
+mypipe         -&gt; http://localhost/mypipe
+xpath          -&gt; http://neon-semiotics-490.appspot.com/xpath
+cssselect      -&gt; http://neon-semiotics-490.appspot.com/cssselect
+csv2json       -&gt; http://neon-semiotics-490.appspot.com/csv2json
+json2csv       -&gt; http://neon-semiotics-490.appspot.com/json2csv
+json_print_r   -&gt; http://neon-semiotics-490.appspot.com/json_print_r
+jsonpath       -&gt; http://neon-semiotics-490.appspot.com/jsonpath
+markdown       -&gt; http://neon-semiotics-490.appspot.com/markdown
+striphtml      -&gt; http://neon-semiotics-490.appspot.com/striphtml
+url2html       -&gt; http://neon-semiotics-490.appspot.com/url2html
+xml2json       -&gt; http://neon-semiotics-490.appspot.com/xml2json
+mycommand      -&gt; http://foo.bar.com/mycommand
+sendmail       -&gt; http://foo.bar.com/sendmail
+notifypentagon -&gt; http://foo.bar.com/notifypentagon
+makecoffee     -&gt; http://foo.bar.com/makecoffee
+notifypentagon -&gt; http://foo.bar.com/notifypentagon
+</code></pre>
+
+<h3>
+<a id="reset" class="anchor" href="#reset" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reset</h3>
+
+<p>Reset all your indexed webpipes</p>
+
+<pre><code>webpipe::reset
+</code></pre>
+
+<h3>
+<a id="how-can-i-build-my-own-webpipes-in-the-cloud" class="anchor" href="#how-can-i-build-my-own-webpipes-in-the-cloud" aria-hidden="true"><span class="octicon octicon-link"></span></a>How can I build my own webpipes in the cloud?</h3>
 
 <p>Simple, a webpipe is just a weburl which listens to a POST-request (for data) or OPTIONS-request (for displaying help).</p>
 
-<p>For php there's this skeleton <a href="https://github.com/coderofsalvation/webpipe.bash.php">repository</a></p>
+<p>Basically all GET-, POST- etc arguments are combined into one object, which processed by the webpipe.
+The webpipe returns output which suits the content-type.
+So with 'application/json':</p>
+
+<pre><code>{"output":["foo","bar"]}
+</code></pre>
+
+<p>Could be with 'text/plain' (a unix webpipe)</p>
+
+<pre><code>foo
+bar
+</code></pre>
+
+<p>For php there's this skeleton <a href="https://github.com/coderofsalvation/webpipe.bash.php">repository</a>.</p>
 
 <h3>
-<a name="projects-using-webpipebash" class="anchor" href="#projects-using-webpipebash"><span class="octicon octicon-link"></span></a>Projects using webpipe.bash</h3>
+<a id="but-im-in-love-with-json" class="anchor" href="#but-im-in-love-with-json" aria-hidden="true"><span class="octicon octicon-link"></span></a>But I'm in love with JSON/</h3>
+
+<p>The commandline is great, but yes, at some point JSON becomes preferrable (to avoid complex oneliners).
+Lets take the xpath example above, imagine we have 10 other arguments.
+In that case it might be handy to hide our complexity in a json payload file:</p>
+
+<pre><code>  $ cat &gt; payload.json
+  {
+    "path": "//order/customer/name"
+    "input": "$pipe"
+  }
+  (CTRL-D)
+
+  $ cat foo.xml | xpath payload.json 
+  John Doe
+</code></pre>
+
+<p>Whenever the first argument is a jsonfile, Webpipe.bash will do a POST-request with content-type 'application/json'.</p>
+
+<h3>
+<a id="capturereplay" class="anchor" href="#capturereplay" aria-hidden="true"><span class="octicon octicon-link"></span></a>Capture/Replay</h3>
+
+<p>You can inspect your payload anywhere in the pipeline.</p>
+
+<pre><code>$ cat foo.xml | CAPTURE=1 log --job | filter --inactive --retired | CAPTURE=1 xpath payload.json 
+written 'log.payload.10928391.json'
+written 'xpath.payload.10928392.json'
+</code></pre>
+
+<p>And replay it (usefull for testing/debugging):</p>
+
+<pre><code>$ log log.payload.10928391.json
+$ xpath xpath.payload.10928391.json
+</code></pre>
+
+<h3>
+<a id="restful" class="anchor" href="#restful" aria-hidden="true"><span class="octicon octicon-link"></span></a>RESTful?</h3>
+
+<pre><code>$ cat foo.xml | X=DELETE TYPE="application/soap+xml" somewebpipe payload.json
+</code></pre>
+
+<p>However, this is not really the focus of webpipes, see <a href="https://github.com/micha/resty">RESTY</a> for easily testing REST api's and such.</p>
+
+<h3>
+<a id="basic-design-of-unix-webpipe" class="anchor" href="#basic-design-of-unix-webpipe" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic design of UNIX webpipe</h3>
+
+<p>Webpipes usually work with 'application/json' which is fine.
+But unix output (tab-delimited e.g.) can be implemented by listening to content-type 'text/plain':</p>
+
+<pre><code>$ mywebpipe foobar --foo bar
+</code></pre>
+
+<p>would result in a 'text/plain' GET-request:</p>
+
+<p><img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/doc/unixwebpipe-get.png"></p>
+
+<pre><code>$ cat foo.json | webpipe --foo bar 
+</code></pre>
+
+<p>would result in a 'text/plain' POST-request:    </p>
+
+<p><img alt="" src="https://raw.github.com/coderofsalvation/webpipe.bash/master/doc/unixwebpipe-post.png"></p>
+
+<pre><code>$ mywebpipe
+Usage: mywebpipe &lt;arg&gt; [-foo &lt;str&gt;]
+</code></pre>
+
+<p>This would result in an 'text/plain' OPTIONS-request (which should return information on usage)</p>
+
+<h3>
+<a id="projects-using-webpipebash" class="anchor" href="#projects-using-webpipebash" aria-hidden="true"><span class="octicon octicon-link"></span></a>Projects using webpipe.bash</h3>
 
 <ul>
-<li>bashlive.com ( supernatural livecoding using bash )</li>
-</ul><h3>
-<a name="security" class="anchor" href="#security"><span class="octicon octicon-link"></span></a>Security</h3>
+<li>
+<a href="http://www.bashlive.com">www.bashlive.com</a> ( supernatural livecoding using bash )</li>
+</ul>
+
+<h3>
+<a id="security" class="anchor" href="#security" aria-hidden="true"><span class="octicon octicon-link"></span></a>Security</h3>
 
 <p>Sourcing output of remote procedures from untrusted sources is never adviced.
 However, in case your webpipes needs authorisation (.htaccess .htpasswd e.g.) run, decorate the curl calls with this:</p>
@@ -146,7 +258,7 @@ However, in case your webpipes needs authorisation (.htaccess .htpasswd e.g.) ru
 <p>By doing so, the webpipe (called by curl) will pass authorisation info.</p>
 
 <h1>
-<a name="compatibility-with-webpipe-specification-02" class="anchor" href="#compatibility-with-webpipe-specification-02"><span class="octicon octicon-link"></span></a>Compatibility with WebPipe Specification 0.2</h1>
+<a id="compatibility-with-webpipe-specification-02" class="anchor" href="#compatibility-with-webpipe-specification-02" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compatibility with WebPipe Specification 0.2</h1>
 
 <p>The webpipes above are more or less compatible.
 One exception is that requests (with content-type 'plain/text',  used in the example above) uses single-input single-output.
@@ -192,7 +304,44 @@ $ curl -X TRACE http://localhost/foobar
 <p>However, this multi-in multi-out-assumption of the specs doesnt really fit my needs, therefore for practical reasons contenttypes 'text/plain' and 'text/html' default to single-textinput single-textoutput..the default behaviour of any webserver.</p>
 
 <h3>
-<a name="further-thoughts" class="anchor" href="#further-thoughts"><span class="octicon octicon-link"></span></a>Further Thoughts</h3>
+<a id="commandline-argument-to-getarguments" class="anchor" href="#commandline-argument-to-getarguments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Commandline argument to getarguments</h3>
+
+<p>By default webpipe.bash will send http using the 'text/plain'-content-type.
+Positional parameters will be converted to GET variable '1' / '2' and so on, like so:</p>
+
+<pre><code>mywebpipe somevar --foo bar --foo2 bar2
+</code></pre>
+
+<p>In the webpipe itself this will be received as GET variables:</p>
+
+<pre><code>'1': 'somevar',
+'foo': 'bar',
+'foo2': 'bar2'
+</code></pre>
+
+<p>This makes it easy to start developing a webpipe by using webpipe.bash as a startingpoint:</p>
+
+<pre><code>$ webpipe::set webpipe http://localhost/mynewwebpipe
+$ mynewwebpipe hellowrodl --foo bar 
+&lt;html&gt;
+  404 Not found
+  method:   GET
+  Get args: '1'   =&gt; hellowrodl
+            'foo' =&gt; bar
+&lt;/html&gt;
+
+$ echo "fooo" | mynewwebpipe hellowrodl --foo bar 
+&lt;html&gt;
+  404 Not found
+  method:   POST
+  Get args: '1'   =&gt; hellowrodl
+            'foo' =&gt; bar
+  Post payload: 'foooo'                
+&lt;/html&gt;
+</code></pre>
+
+<h3>
+<a id="further-thoughts" class="anchor" href="#further-thoughts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Further Thoughts</h3>
 
 <ul>
 <li>webpipe is easy to scale</li>
@@ -203,6 +352,8 @@ $ curl -X TRACE http://localhost/foobar
 <li>teams need something pipable</li>
 <li>prevents a large codebase </li>
 <li>spread domainknowledge across webpipes instead of bundling in 1 codebase</li>
+<li>bash can be an interface between programmers with different backgrounds</li>
+<li>unix pipelining is a service bus in certain perspective</li>
 <li>webpipes need tests</li>
 <li>webpipes need to notify a central place in case of problems .e.g</li>
 </ul>
@@ -213,7 +364,7 @@ $ curl -X TRACE http://localhost/foobar
     <div id="footer_wrap" class="outer">
       <footer class="inner">
         <p class="copyright">Webpipe.bash maintained by <a href="https://github.com/coderofsalvation">coderofsalvation</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
 
